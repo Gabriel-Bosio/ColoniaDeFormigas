@@ -14,7 +14,7 @@ internal class Program
         double parametroAlpha = 1; // -- Alpha
         double parametroBeta = 5; // -- Beta
         double taxaEvaporacao = 0.5; // -- Sigma
-        int qtdFormigasIteracao = cidades.Vertices.Count; // -- m
+        int qtdFormigasIteracao = cidades.Vertices.Count; // -- n
         double constanteAtualizacao = 100; // -- Q
         double feromonioInicial = 0.00001; // -- T0
         double parametroElitismo = 5; // -- e
