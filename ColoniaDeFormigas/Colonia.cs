@@ -114,8 +114,8 @@ namespace ColoniaDeFormigas
             Stopwatch sw = Stopwatch.StartNew();
 
             Grafo mapaFeromonios = new(mapaRotas, FeromonioInicial);
-            double distanciaPrimeiraIteracao = int.MaxValue;
-            double menorDistancia = int.MaxValue;
+            double distanciaPrimeiraIteracao = double.MaxValue;
+            double menorDistancia = double.MaxValue;
             List<int> menorCaminho = new();
             int ultimaIteracaoMelhorada = 0;
 
