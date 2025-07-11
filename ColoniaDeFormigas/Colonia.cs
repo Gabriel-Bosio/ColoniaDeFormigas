@@ -113,7 +113,7 @@ namespace ColoniaDeFormigas
                                 }
                             }
                             //Tkxy(t) = (1 - Sigma) * Txy(t-1) + Sum(DeltaTkxy(t)) + e * Best(DeltaTkxy(t))
-                            double feromonioAtualizado = (1 - TaxaEvaporacao) * feromonioAnterior + feromonioIteracao.PesoAresta(i, j) + ParametroElitismo * Math.Pow(bestD, ParametroElitismo);
+                            double feromonioAtualizado = (1 - TaxaEvaporacao) * feromonioAnterior + feromonioIteracao.PesoAresta(i, j) + ParametroElitismo * bestD;
                             mapaFeromonios.RemoverAresta(i, j);
                             mapaFeromonios.InserirAresta(i, j, feromonioAtualizado);
                         }
@@ -213,7 +213,7 @@ namespace ColoniaDeFormigas
                         }
 
                         //Tkxy(t) = (1 - Sigma) * Txy(t-1) + Sum(DeltaTkxy(t)) + e * Best(DeltaTkxy(t))
-                        double feromonioAtualizado = (1 - TaxaEvaporacao) * feromonioAnterior + feromonioIteracao.PesoAresta(i, j) + ParametroElitismo * Math.Pow(bestD, ParametroElitismo);
+                        double feromonioAtualizado = (1 - TaxaEvaporacao) * feromonioAnterior + feromonioIteracao.PesoAresta(i, j) + ParametroElitismo * bestD;
 
                         lock (mapaFeromonios)
                         {
