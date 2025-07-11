@@ -41,7 +41,7 @@ namespace ColoniaDeFormigas
             double menorDistancia = int.MaxValue;
             List<int> menorCaminho = new();
             int ultimaIteracaoMelhorada = 0;
-            double melhorDelta = 0;
+            double feromonioMelhorFormiga = 0;
 
             for (int iteracao = 0; iteracao < NumeroIteracoes; iteracao++)
             {
@@ -73,6 +73,11 @@ namespace ColoniaDeFormigas
 
                     double feromonioFormiga = ConstanteAtualizacao / formiga.Distancia; //DeltaTkxy = Q/dk 
 
+                    if (formiga.Distancia < menorDistancia)
+                    {
+                        feromonioMelhorFormiga = feromonioFormiga;
+                    }
+
                     for (int i = 0; i < formiga.Caminho.Count - 1; i++)
                     {
                         int origem = formiga.Caminho[i];
@@ -81,11 +86,6 @@ namespace ColoniaDeFormigas
                         double feromonioAresta = feromonioIteracao.PesoAresta(origem, destino) + feromonioFormiga;
                         feromonioIteracao.RemoverAresta(origem, destino);
                         feromonioIteracao.InserirAresta(origem, destino, feromonioAresta);
-
-                        if (formiga.Distancia < menorDistancia)
-                        {
-                            melhorDelta = feromonioFormiga;
-                        }
                     }
                 }
 
@@ -103,8 +103,17 @@ namespace ColoniaDeFormigas
                         {
                             double feromonioAnterior = mapaFeromonios.PesoAresta(i, j);
 
+                            double bestD = 0;
+                            for (int v = 0; v < menorCaminho.Count - 1; v++)
+                            {
+                                if (i == menorCaminho[v] && j == menorCaminho[v + 1] || i == menorCaminho[v + 1] && j == menorCaminho[v])
+                                {
+                                    bestD = feromonioMelhorFormiga;
+                                    break;
+                                }
+                            }
                             //Tkxy(t) = (1 - Sigma) * Txy(t-1) + Sum(DeltaTkxy(t)) + e * Best(DeltaTkxy(t))
-                            double feromonioAtualizado = (1 - TaxaEvaporacao) * feromonioAnterior + feromonioIteracao.PesoAresta(i, j) + ParametroElitismo * Math.Pow(melhorDelta, ParametroElitismo);
+                            double feromonioAtualizado = (1 - TaxaEvaporacao) * feromonioAnterior + feromonioIteracao.PesoAresta(i, j) + ParametroElitismo * Math.Pow(bestD, ParametroElitismo);
                             mapaFeromonios.RemoverAresta(i, j);
                             mapaFeromonios.InserirAresta(i, j, feromonioAtualizado);
                         }
@@ -124,7 +133,7 @@ namespace ColoniaDeFormigas
             double menorDistancia = double.MaxValue;
             List<int> menorCaminho = new();
             int ultimaIteracaoMelhorada = 0;
-            double melhorDelta = 0;
+            double feromonioMelhorFormiga = 0;
 
             for (int iteracao = 0; iteracao < NumeroIteracoes; iteracao++)
             {
@@ -161,6 +170,11 @@ namespace ColoniaDeFormigas
 
                     double feromonioFormiga = ConstanteAtualizacao / formiga.Distancia; //DeltaTkxy = Q/dk 
 
+                    if (formiga.Distancia < menorDistancia)
+                    {
+                        feromonioMelhorFormiga = feromonioFormiga;
+                    }
+
                     for (int i = 0; i < formiga.Caminho.Count - 1; i++)
                     {
                         int origem = formiga.Caminho[i];
@@ -169,11 +183,6 @@ namespace ColoniaDeFormigas
                         double feromonioAresta = feromonioIteracao.PesoAresta(origem, destino) + feromonioFormiga;
                         feromonioIteracao.RemoverAresta(origem, destino);
                         feromonioIteracao.InserirAresta(origem, destino, feromonioAresta);
-
-                        if (formiga.Distancia < menorDistancia)
-                        {
-                            melhorDelta = feromonioFormiga;
-                        }
                     }
                 }
 
@@ -192,8 +201,19 @@ namespace ColoniaDeFormigas
                     if ((!mapaFeromonios.Direcionado && j > i) || i != j) //Não repete rotas caso não direcionado e evita insersão própria
                     {
                         double feromonioAnterior = mapaFeromonios.PesoAresta(i, j);
+
+                        double bestD = 0;
+                        for(int v = 0; v < menorCaminho.Count - 1; v++)
+                        {
+                            if(i == menorCaminho[v] && j == menorCaminho[v+ 1] || i == menorCaminho[v + 1] && j == menorCaminho[v])
+                            {
+                                bestD = feromonioMelhorFormiga;
+                                break;
+                            }
+                        }
+
                         //Tkxy(t) = (1 - Sigma) * Txy(t-1) + Sum(DeltaTkxy(t)) + e * Best(DeltaTkxy(t))
-                        double feromonioAtualizado = (1 - TaxaEvaporacao) * feromonioAnterior + feromonioIteracao.PesoAresta(i, j) + ParametroElitismo * Math.Pow(melhorDelta, ParametroElitismo);
+                        double feromonioAtualizado = (1 - TaxaEvaporacao) * feromonioAnterior + feromonioIteracao.PesoAresta(i, j) + ParametroElitismo * Math.Pow(bestD, ParametroElitismo);
 
                         lock (mapaFeromonios)
                         {

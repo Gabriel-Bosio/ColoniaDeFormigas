@@ -4,7 +4,7 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        LeitorGrafo leitor = new LeitorGrafo(".\\..\\..\\..\\Grafo_100_Cidades.txt");
+        LeitorGrafo leitor = new LeitorGrafo(".\\..\\..\\..\\Grafo_50_Cidades.txt");
         Grafo cidades = null;
 
         leitor.GeraGrafo(ref cidades);
@@ -22,7 +22,7 @@ internal class Program
         
 
         Colonia colonia = new(taxaEvaporacao, parametroAlpha, parametroBeta, feromonioInicial, constanteAtualizacao, parametroElitismo , numeroIteracoes, qtdFormigasIteracao);
-        //colonia.ResolverCaixeiroViajante(cidades);
-        colonia.ResolverCaixeiroViajanteParalelo(cidades);
+        colonia.ResolverCaixeiroViajante(cidades);
+        //colonia.ResolverCaixeiroViajanteParalelo(cidades);
     }
 }
