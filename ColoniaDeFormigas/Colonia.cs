@@ -41,7 +41,6 @@ namespace ColoniaDeFormigas
             double menorDistancia = int.MaxValue;
             List<int> menorCaminho = new();
             int ultimaIteracaoMelhorada = 0;
-            double feromonioMelhorFormiga = 0;
 
             for (int iteracao = 0; iteracao < NumeroIteracoes; iteracao++)
             {
@@ -73,11 +72,6 @@ namespace ColoniaDeFormigas
 
                     double feromonioFormiga = ConstanteAtualizacao / formiga.Distancia; //DeltaTkxy = Q/dk 
 
-                    if (formiga.Distancia < menorDistancia)
-                    {
-                        feromonioMelhorFormiga = feromonioFormiga;
-                    }
-
                     for (int i = 0; i < formiga.Caminho.Count - 1; i++)
                     {
                         int origem = formiga.Caminho[i];
@@ -108,7 +102,7 @@ namespace ColoniaDeFormigas
                             {
                                 if (i == menorCaminho[v] && j == menorCaminho[v + 1] || i == menorCaminho[v + 1] && j == menorCaminho[v])
                                 {
-                                    bestD = feromonioMelhorFormiga;
+                                    bestD = ConstanteAtualizacao/menorDistancia;
                                     break;
                                 }
                             }
@@ -170,11 +164,6 @@ namespace ColoniaDeFormigas
 
                     double feromonioFormiga = ConstanteAtualizacao / formiga.Distancia; //DeltaTkxy = Q/dk 
 
-                    if (formiga.Distancia < menorDistancia)
-                    {
-                        feromonioMelhorFormiga = feromonioFormiga;
-                    }
-
                     for (int i = 0; i < formiga.Caminho.Count - 1; i++)
                     {
                         int origem = formiga.Caminho[i];
@@ -207,7 +196,7 @@ namespace ColoniaDeFormigas
                         {
                             if(i == menorCaminho[v] && j == menorCaminho[v+ 1] || i == menorCaminho[v + 1] && j == menorCaminho[v])
                             {
-                                bestD = feromonioMelhorFormiga;
+                                bestD = ConstanteAtualizacao/menorDistancia;
                                 break;
                             }
                         }
