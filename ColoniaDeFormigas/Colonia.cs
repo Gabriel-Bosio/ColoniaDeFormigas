@@ -59,6 +59,7 @@ namespace ColoniaDeFormigas
 
                 //Seção de calculo do feromonio lançado pelas formigas e verificação de distância
                 Grafo feromonioIteracao = new(mapaFeromonios, 0);
+                Grafo melhoresDeltas = new(mapaFeromonios, 0);
 
                 foreach (Formiga formiga in formigas)
                 {
@@ -80,6 +81,12 @@ namespace ColoniaDeFormigas
                         double feromonioAresta = feromonioIteracao.PesoAresta(origem, destino) + feromonioFormiga;
                         feromonioIteracao.RemoverAresta(origem, destino);
                         feromonioIteracao.InserirAresta(origem, destino, feromonioAresta);
+
+                        if (feromonioFormiga > melhoresDeltas.PesoAresta(origem, destino))
+                        {
+                            melhoresDeltas.RemoverAresta(origem, destino);
+                            melhoresDeltas.InserirAresta(origem, destino, feromonioFormiga);
+                        }
                     }
                 }
 
@@ -97,8 +104,8 @@ namespace ColoniaDeFormigas
                         {
                             double feromonioAnterior = mapaFeromonios.PesoAresta(i, j);
 
-                            //Tkxy(t) = (1 - Sigma) * Txy(t-1) + e * Sum(DeltaTkxy(t))
-                            double feromonioAtualizado = (1 - TaxaEvaporacao) * feromonioAnterior + ParametroElitismo * feromonioIteracao.PesoAresta(i, j);
+                            //Tkxy(t) = (1 - Sigma) * Txy(t-1) + Sum(DeltaTkxy(t)) + e * Best(DeltaTkxy(t))
+                            double feromonioAtualizado = (1 - TaxaEvaporacao) * feromonioAnterior + feromonioIteracao.PesoAresta(i, j) + ParametroElitismo * Math.Pow(melhoresDeltas.PesoAresta(i, j), ParametroElitismo);
                             mapaFeromonios.RemoverAresta(i, j);
                             mapaFeromonios.InserirAresta(i, j, feromonioAtualizado);
                         }
@@ -141,6 +148,7 @@ namespace ColoniaDeFormigas
 
                 //Seção de calculo do feromonio lançado pelas formigas e verificação de distância
                 Grafo feromonioIteracao = new(mapaFeromonios, 0);
+                Grafo melhoresDeltas = new(mapaFeromonios, 0);
 
                 foreach (Formiga formiga in formigas)
                 {
@@ -162,6 +170,12 @@ namespace ColoniaDeFormigas
                         double feromonioAresta = feromonioIteracao.PesoAresta(origem, destino) + feromonioFormiga;
                         feromonioIteracao.RemoverAresta(origem, destino);
                         feromonioIteracao.InserirAresta(origem, destino, feromonioAresta);
+
+                        if (feromonioFormiga > melhoresDeltas.PesoAresta(origem, destino))
+                        {
+                            melhoresDeltas.RemoverAresta(origem, destino);
+                            melhoresDeltas.InserirAresta(origem, destino, feromonioFormiga);
+                        }
                     }
                 }
 
@@ -180,8 +194,8 @@ namespace ColoniaDeFormigas
                     if ((!mapaFeromonios.Direcionado && j > i) || i != j) //Não repete rotas caso não direcionado e evita insersão própria
                     {
                         double feromonioAnterior = mapaFeromonios.PesoAresta(i, j);
-                        //Tkxy(t) = (1 - Sigma) * Txy(t-1) + e * Sum(DeltaTkxy(t))
-                        double feromonioAtualizado = (1 - TaxaEvaporacao) * feromonioAnterior + ParametroElitismo * feromonioIteracao.PesoAresta(i, j); ;
+                        //Tkxy(t) = (1 - Sigma) * Txy(t-1) + Sum(DeltaTkxy(t)) + e * Best(DeltaTkxy(t))
+                        double feromonioAtualizado = (1 - TaxaEvaporacao) * feromonioAnterior + feromonioIteracao.PesoAresta(i, j) + ParametroElitismo * Math.Pow(melhoresDeltas.PesoAresta(i, j), ParametroElitismo);
 
                         lock (mapaFeromonios)
                         {
