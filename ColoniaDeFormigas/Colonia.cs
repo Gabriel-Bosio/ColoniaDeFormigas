@@ -41,6 +41,7 @@ namespace ColoniaDeFormigas
             double menorDistancia = int.MaxValue;
             List<int> menorCaminho = new();
             int ultimaIteracaoMelhorada = 0;
+            double melhorDelta = 0;
 
             for (int iteracao = 0; iteracao < NumeroIteracoes; iteracao++)
             {
@@ -59,7 +60,6 @@ namespace ColoniaDeFormigas
 
                 //Seção de calculo do feromonio lançado pelas formigas e verificação de distância
                 Grafo feromonioIteracao = new(mapaFeromonios, 0);
-                Grafo melhoresDeltas = new(mapaFeromonios, 0);
 
                 foreach (Formiga formiga in formigas)
                 {
@@ -82,10 +82,9 @@ namespace ColoniaDeFormigas
                         feromonioIteracao.RemoverAresta(origem, destino);
                         feromonioIteracao.InserirAresta(origem, destino, feromonioAresta);
 
-                        if (feromonioFormiga > melhoresDeltas.PesoAresta(origem, destino))
+                        if (formiga.Distancia < menorDistancia)
                         {
-                            melhoresDeltas.RemoverAresta(origem, destino);
-                            melhoresDeltas.InserirAresta(origem, destino, feromonioFormiga);
+                            melhorDelta = feromonioFormiga;
                         }
                     }
                 }
@@ -105,7 +104,7 @@ namespace ColoniaDeFormigas
                             double feromonioAnterior = mapaFeromonios.PesoAresta(i, j);
 
                             //Tkxy(t) = (1 - Sigma) * Txy(t-1) + Sum(DeltaTkxy(t)) + e * Best(DeltaTkxy(t))
-                            double feromonioAtualizado = (1 - TaxaEvaporacao) * feromonioAnterior + feromonioIteracao.PesoAresta(i, j) + ParametroElitismo * Math.Pow(melhoresDeltas.PesoAresta(i, j), ParametroElitismo);
+                            double feromonioAtualizado = (1 - TaxaEvaporacao) * feromonioAnterior + feromonioIteracao.PesoAresta(i, j) + ParametroElitismo * Math.Pow(melhorDelta, ParametroElitismo);
                             mapaFeromonios.RemoverAresta(i, j);
                             mapaFeromonios.InserirAresta(i, j, feromonioAtualizado);
                         }
@@ -125,6 +124,7 @@ namespace ColoniaDeFormigas
             double menorDistancia = double.MaxValue;
             List<int> menorCaminho = new();
             int ultimaIteracaoMelhorada = 0;
+            double melhorDelta = 0;
 
             for (int iteracao = 0; iteracao < NumeroIteracoes; iteracao++)
             {
@@ -148,7 +148,6 @@ namespace ColoniaDeFormigas
 
                 //Seção de calculo do feromonio lançado pelas formigas e verificação de distância
                 Grafo feromonioIteracao = new(mapaFeromonios, 0);
-                Grafo melhoresDeltas = new(mapaFeromonios, 0);
 
                 foreach (Formiga formiga in formigas)
                 {
@@ -171,10 +170,9 @@ namespace ColoniaDeFormigas
                         feromonioIteracao.RemoverAresta(origem, destino);
                         feromonioIteracao.InserirAresta(origem, destino, feromonioAresta);
 
-                        if (feromonioFormiga > melhoresDeltas.PesoAresta(origem, destino))
+                        if (formiga.Distancia < menorDistancia)
                         {
-                            melhoresDeltas.RemoverAresta(origem, destino);
-                            melhoresDeltas.InserirAresta(origem, destino, feromonioFormiga);
+                            melhorDelta = feromonioFormiga;
                         }
                     }
                 }
@@ -195,7 +193,7 @@ namespace ColoniaDeFormigas
                     {
                         double feromonioAnterior = mapaFeromonios.PesoAresta(i, j);
                         //Tkxy(t) = (1 - Sigma) * Txy(t-1) + Sum(DeltaTkxy(t)) + e * Best(DeltaTkxy(t))
-                        double feromonioAtualizado = (1 - TaxaEvaporacao) * feromonioAnterior + feromonioIteracao.PesoAresta(i, j) + ParametroElitismo * Math.Pow(melhoresDeltas.PesoAresta(i, j), ParametroElitismo);
+                        double feromonioAtualizado = (1 - TaxaEvaporacao) * feromonioAnterior + feromonioIteracao.PesoAresta(i, j) + ParametroElitismo * Math.Pow(melhorDelta, ParametroElitismo);
 
                         lock (mapaFeromonios)
                         {
